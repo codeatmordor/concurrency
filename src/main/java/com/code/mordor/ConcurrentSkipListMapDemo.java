@@ -1,13 +1,11 @@
 package com.code.mordor;
 
 
+import java.sql.Time;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentNavigableMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
@@ -105,5 +103,12 @@ public class ConcurrentSkipListMapDemo {
                 .filter(e -> e.getKey().isAfter(ZonedDateTime.now().minusMinutes(1)))
                 .count();
         assertTrue(eventYoungerThanOneMinute > 0);
+
+        try {
+            executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
+            executorService.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
